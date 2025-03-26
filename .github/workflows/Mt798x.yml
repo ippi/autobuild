@@ -29,12 +29,12 @@ on:
         type: choice
         options:
           - 'glinet-gl-xe3000'
-          - 'huasifei_wh3000-emmc'
+          - 'huasifei-wh3000-emmc'
           - '360-t7-108M'
           - 'clt-r30b1-112M'
           - 'cmcc-rax3000m-emmc'
           - 'jcg-q30'
-          - 'xiaomi_redmi-router-ax6000'
+          - 'xiaomi-redmi-router-ax6000'
       CPU_SELECTION:
         description: 'CPU优选,增加编译速度'
         required: true

@@ -33,7 +33,6 @@ on:
           - 'phicomm_k2p'
           - 'x86_32'
           - 'x86_64'
-          - 'rpi4'
           - 'xiaomi_mi-router-4a-gigabit'
           - 'xiaomi_redmi-router-ac2100'
           - 'xiaomi_redmi-router-ax6s'
