@@ -22,6 +22,7 @@ env:
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
   TZ: Asia/Shanghai
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 jobs:
   build:
@@ -216,6 +217,17 @@ jobs:
         artifacts: "Github_Api/*"
         allowUpdates: true
         body: ${{ env.Tongzhi_Date }}
+                
+    - name: 上传docker镜像
+      continue-on-error: true
+      if: steps.compile.outcome == 'success' && env.UPLOAD_FIRMWARE == 'true'
+      run: |
+        current_time=`date "+%Y-%m-%d"`
+        echo ${{ env.DOCKERHUB_TOKEN }} | xargs docker login -u ippi --password
+        docker import ${{ env.FIRMWARE_PATH }}/openwrt-${{ env.TARGET_BOARD }}-${{ env.TARGET_SUBTARGET }}-${{ env.TARGET_PROFILE }}-rootfs.tar.gz ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:$current_time
+        docker push ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:$current_time
+        docker tag ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:$current_time ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:latest
+        docker push ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:latest  
 
     - name: Telegram或pushplus信息通知
       if: env.PUSH_PLUS_TOKEN && env.INFORMATION_NOTICE == 'PUSH' || env.TELEGRAM_BOT_TOKEN && env.INFORMATION_NOTICE == 'TG'
