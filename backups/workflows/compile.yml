@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'bconfig'
+      - 'build/Lede/relevance/start'
 
 env:
   GITHUB_LINK: https://github.com/${{github.repository}}
@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [Immortalwrt]
+        target: [Lede]
 
     steps:    
     - name: 准备结束
@@ -224,7 +224,7 @@ jobs:
       run: |
         current_time=`date "+%Y-%m-%d"`
         echo ${{ env.DOCKERHUB_TOKEN }} | xargs docker login -u ippi --password
-        docker import ${{ env.FIRMWARE_PATH }}/openwrt-${{ env.TARGET_BOARD }}-${{ env.TARGET_SUBTARGET }}-${{ env.TARGET_PROFILE }}-rootfs.tar.gz ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:$current_time
+        docker import ${{ env.FIRMWARE_PATH }}/*rootfs.tar.gz ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:$current_time
         docker push ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:$current_time
         docker tag ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:$current_time ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:latest
         docker push ippi/${{ env.TARGET_PROFILE }}-lean-openwrt:latest  
